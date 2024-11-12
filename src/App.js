@@ -24,8 +24,10 @@ const App = () => {
           });
         } else {
           if (type === "per") {
+            allocateChild(row, value, type);
             row.value += allocateByPer(row.value, value);
           } else {
+            allocateChild(row, value, type);
             row.value = value;
           }
         }
@@ -40,6 +42,19 @@ const App = () => {
   const allocateByPer = (currentVal, per) => {
     const val = (currentVal * per) / 100;
     return val;
+  };
+
+  const allocateChild = (row, val, type) => {
+    let value;
+    if (type === "per") {
+      value = row.value + allocateByPer(row.value, val);
+    } else {
+      value = val;
+    }
+    row.children.forEach((child) => {
+      let per = (child.value / row.value) * 100;
+      child.value = (value * per) / 100;
+    });
   };
 
   return (

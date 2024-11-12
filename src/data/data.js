@@ -3,7 +3,7 @@ export const data = {
     {
       id: "electronics",
       label: "Electronics",
-      value: 1400, //this value needs to be calculated from the children values (800+700)
+      value: 1500, //this value needs to be calculated from the children values (800+700)
       children: [
         {
           id: "phones",
