@@ -1,25 +1,83 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { data } from "./data/data";
+import "./App.css";
+import Category from "./components/Category";
 
-function App() {
+const App = () => {
+  const [details, setDetails] = useState(data);
+  const handleChange = (categoryId, productId, value, type) => {
+    value = parseInt(value);
+    const updatedDetails = details.rows.map((row) => {
+      if (row.id === categoryId) {
+        if (productId != null) {
+          row.children.map((product) => {
+            if (product.id === productId) {
+              if (type === "per") {
+                row.value += allocateByPer(product.value, value);
+                product.value += allocateByPer(product.value, value);
+              } else {
+                product.value = value;
+                row.value += value;
+              }
+            }
+            return product;
+          });
+        } else {
+          if (type === "per") {
+            row.value += allocateByPer(row.value, value);
+          } else {
+            row.value = value;
+          }
+        }
+      }
+      return row;
+    });
+    setDetails({
+      rows: updatedDetails,
+    });
+  };
+
+  const allocateByPer = (currentVal, per) => {
+    const val = (currentVal * per) / 100;
+    return val;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="p-10">
+      <h1 className="text-3xl text-center font-bold">Hierarchical Table</h1>
+      <table className="min-w-full table-auto border-collapse mt-10">
+        <thead>
+          <tr className="border-b bg-gray-100">
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Label
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Value
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Input
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Allocation %
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Allocation val
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              Variance %
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {details.rows.map((row) => (
+            <React.Fragment key={row.id}>
+              <Category details={row} handleChange={handleChange} />
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
 
 export default App;
