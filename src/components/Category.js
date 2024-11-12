@@ -13,7 +13,6 @@ const Category = ({ details, handleChange }) => {
   const [varianceValue, setVarianceValue] = useState(0);
 
   useEffect(() => {
-    console.log(category.value, details.value);
     setVarianceValue(variance(category.value, details.value));
   }, [details.value]);
 

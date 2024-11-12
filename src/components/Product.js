@@ -7,7 +7,6 @@ const Product = ({ productDetails, handleChange, category }) => {
   });
   const [varianceValue, setVarianceValue] = useState(0);
   useEffect(() => {
-    console.log(product.value, productDetails.value);
     setVarianceValue(variance(product.value, productDetails.value));
   }, [productDetails.value]);
 
